@@ -1,13 +1,14 @@
 public class Creature {
   public PVector pos, vel;
-  public int speed = 1;
-  public float hp = 100.0;
-  public final int SIZE = 100;
+  public int speed = 10;
+  public float hp = 10.0;
+  public final int SIZE = 25;
   public final color COLOR = color(
       (int)(Math.random()*181),
       (int)(Math.random()*182),
       (int)(Math.random()*183)
       );
+      public boolean active = true;
   
   public Creature(int x, int y) {
     pos = new PVector(x,y);
@@ -21,9 +22,16 @@ public class Creature {
   
   public void move() {
     vel = PVector.random2D().mult(speed);
+     hp-=0.1;
+     
+     if(hp <= 0)
+    this.active = false;
+    
+    System.out.println("HP: "+hp);
     
  pos.add(vel);
-  
+
+ 
   }
   public boolean collideWorldBounds() {
     if (pos.y + SIZE/2 >= height) {
@@ -31,6 +39,8 @@ public class Creature {
       vel.add(bounce);
       return true;
     }
+    
+ 
     if (pos.y - SIZE/2 <= 0) {
        PVector bounce = new PVector(0,5*speed);
       vel.add(bounce);
@@ -47,11 +57,20 @@ public class Creature {
      return true;
     }
     return false;
+
   }
   
-  //public void eat(Food f) {
-    
+public void eat(Food f) {
+    double dist = PVector.sub(this.pos,f.pos).mag();
+    if (dist <= this.SIZE / 2 + f.SIZE / 2) {
+   
+      f.active = false;
+      
+      //hp+=1;
+  
   }
+}
+}
   
   //public void attack(Creature creatures) {
     
